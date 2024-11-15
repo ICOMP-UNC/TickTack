@@ -27,4 +27,3 @@ jobs:
 
       - name: Run documentation check
         uses: ./.github/actions/documentation
-
