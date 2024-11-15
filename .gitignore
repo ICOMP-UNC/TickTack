@@ -54,3 +54,7 @@ dkms.conf
 #Ides
 .pio
 .vscode
+
+build/
+check_doxygen.sh
+dox_errors.txt

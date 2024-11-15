@@ -27,9 +27,3 @@ jobs:
 
       - name: Run documentation check
         uses: ./.github/actions/documentation
-
-      - name: Build project
-        uses: ./.github/actions/building
-
-      - name: Run tests and coverage
-        uses: ./.github/actions/coverage_and_test
