@@ -1,4 +1,6 @@
 #include "freertos_tasks.h"
+#include "i2c_cfg.h"
+#include "rtc.h"
 #include "uart.h"
 
 /**
@@ -19,6 +21,7 @@ int main(void)
     systemInit();
     configure_usart();
     xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate(vSend_time_uart_task, "READ and SEND", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
 
     vTaskStartScheduler();
     while (1)

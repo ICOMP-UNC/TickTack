@@ -13,3 +13,5 @@
  * it sends data for uart every specefied time
  */
 void vSend_UART_task(void* args);
+
+void vSend_time_uart_task(void* args);
