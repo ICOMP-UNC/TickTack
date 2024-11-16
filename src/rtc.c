@@ -1,5 +1,6 @@
-#include "rtc.h"
 #include <stdint.h>
+
+#include "rtc.h"
 
 uint8_t data_tx[8];
 uint8_t data_rx[2];
@@ -37,10 +38,15 @@ void DS3231_Get_Time(uint8_t* hr, uint8_t* min, uint8_t* sec)
 
 uint8_t DS3231_Read(uint8_t reg)
 {
-    data_tx[0] = reg;
-    i2c_transfer7(I2C1, DS3231_ADDRESS, &data_tx[0], 1, NULL, 0);
-    i2c_transfer7(I2C1, DS3231_ADDRESS, NULL, 0, data_rx, 1);
-    return data_rx[0];
+    uint8_t data;
+
+    // Enviar la dirección del registro desde donde leer (por ejemplo, 0x00 para la hora)
+    i2c_transfer7(I2C1, DS3231_ADDRESS, &reg, 1, NULL, 0);
+
+    // Leer el dato desde el RTC
+    i2c_transfer7(I2C1, DS3231_ADDRESS, NULL, 0, &data, 1);
+
+    return data; // Retorna el dato leído
 }
 
 uint8_t DS3231_Bin_Bcd(uint8_t binary_value)
@@ -78,8 +84,8 @@ void DS3231_Get_DateTime(Time* time)
 {
     time->second = DS3231_Bcd_Bin(DS3231_Read(DS3231_SEC) & 0x7F);
     time->minute = DS3231_Bcd_Bin(DS3231_Read(DS3231_MIN) & 0x7F);
-    time->hour = DS3231_Bcd_Bin(DS3231_Read(DS3231_HOUR) & 0x3F);
-    time->day = DS3231_Bcd_Bin(DS3231_Read(DS3231_DATE) & 0x3F);
-    time->month = DS3231_Bcd_Bin(DS3231_Read(DS3231_MONTH) & 0x1F);
-    time->year = DS3231_Bcd_Bin(DS3231_Read(DS3231_YEAR));
+    time->hour = DS3231_Bcd_Bin(DS3231_Read(DS3231_HOUR) & 0x7F);
+    time->day = DS3231_Bcd_Bin(DS3231_Read(DS3231_DATE) & 0x7F);
+    time->month = DS3231_Bcd_Bin(DS3231_Read(DS3231_MONTH) & 0x7F);
+    time->year = DS3231_Bcd_Bin(DS3231_Read(DS3231_YEAR) & 0x7F);
 }

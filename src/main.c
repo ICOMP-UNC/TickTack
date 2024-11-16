@@ -20,8 +20,10 @@ int main(void)
 {
     systemInit();
     configure_usart();
+    configure_i2c();
     xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
-    xTaskCreate(vSend_time_uart_task, "READ and SEND", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
+    xTaskCreate(vRead_RTC_Time, "ReadRTC", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
 
     vTaskStartScheduler();
     while (1)

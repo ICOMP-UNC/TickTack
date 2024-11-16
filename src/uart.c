@@ -1,5 +1,4 @@
 #include "uart.h"
-#include "rtc.h"
 
 char dato = 'd';
 
