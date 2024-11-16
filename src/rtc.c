@@ -3,7 +3,7 @@
 #include "rtc.h"
 
 uint8_t data_tx[8];
-uint8_t data_rx[2];
+uint8_t data_rx[1];
 
 void DS3231_Set_Date_Time(uint8_t dy, uint8_t mth, uint8_t yr, uint8_t dw, uint8_t hr, uint8_t mn, uint8_t sc)
 {
