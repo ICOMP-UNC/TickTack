@@ -8,6 +8,6 @@
 #define SPI_SCK_PIN GPIO13
 #define SPI_MISO_PIN GPIO14
 #define SPI_MOSI_PIN GPIO15
-#define SPI_BAUD_PRESC_VALUE 4
+#define SPI_BAUD_PRESC_VALUE 64
 
 void configure_spi(void);

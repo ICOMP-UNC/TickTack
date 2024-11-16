@@ -13,6 +13,8 @@ typedef enum
     RIGHT
 } dir_mx;
 
+extern uint8_t CH[];
+
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
 #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))

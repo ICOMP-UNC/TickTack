@@ -1,5 +1,6 @@
 #include "display.h"
-
+#include "delay.h"
+#include "uart.h"
 uint8_t buffer[80];
 uint8_t buffer_row[80];
 uint8_t CH[] = {
@@ -134,9 +135,10 @@ uint8_t CH[] = {
 
 void MAX7219_Write_Byte(uint8_t byte)
 {
-    uint8_t dat_tx[1];
-    dat_tx[0] = byte;
-    spi_send(SPI2, dat_tx[0]);
+
+    spi_send(SPI2, byte);
+    // usart_send_blocking(USART1,'.');
+    delay(2000);
 }
 
 void MAX7219_Write_Cmd(uint8_t address, uint8_t cmd)
@@ -275,7 +277,7 @@ void MAX7219_Shift_Char(char c, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row(0, CH[j]);
             MAX7219_Shift_Left();
-            // HAL_Delay(speed);
+            delay(speed * 10);
         }
         break;
 
@@ -284,7 +286,7 @@ void MAX7219_Shift_Char(char c, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row((num * 8) - 1, CH[j]);
             MAX7219_Shift_Right();
-            // HAL_Delay(speed);
+            delay(speed * 10);
         }
         break;
 
@@ -318,7 +320,7 @@ void MAX7219_Scroll_NewChar(char* nc, uint32_t speed, dir_mx direction)
         for (int i = 0; i < (num * 8); i++)
         {
             MAX7219_Shift_Left();
-            // HAL_Delay(speed);
+            delay(speed);
         }
         break;
 
@@ -331,7 +333,7 @@ void MAX7219_Scroll_NewChar(char* nc, uint32_t speed, dir_mx direction)
         for (int i = 0; i < (num * 8); i++)
         {
             MAX7219_Shift_Right();
-            // HAL_Delay(speed);
+            delay(speed * 10);
         }
         break;
 
@@ -351,7 +353,7 @@ void MAX7219_Shift_NewChar(char* nc, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row(0, nc[j]);
             MAX7219_Shift_Left();
-            // HAL_Delay(speed);
+            delay(speed);
         }
         break;
 
@@ -360,7 +362,7 @@ void MAX7219_Shift_NewChar(char* nc, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row((num * 8) - 1, nc[j]);
             MAX7219_Shift_Right();
-            // HAL_Delay(speed);
+            delay(speed * 10);
         }
         break;
 
