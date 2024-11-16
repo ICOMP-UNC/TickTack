@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rtc.h"
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/usart.h>
@@ -26,6 +27,10 @@
 #define UART_DATABITS 8
 
 /**
+ * @brief uart buffersize for time struct transfer
+ */
+#define UART_BUFFER_SIZE 64
+/**
  * @brief variable to transmit, it maybe change in the future
  */
 extern char dato;
@@ -35,3 +40,9 @@ extern char dato;
  * gpio clock and uart pheripherial configuration for uart transmitions
  */
 void configure_usart(void);
+
+/**
+ * @brief send struct data formated by uart
+ * @param time Time type struct
+ */
+void send_time_uart(const Time* time);

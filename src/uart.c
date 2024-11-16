@@ -19,3 +19,14 @@ void configure_usart(void)
 
     usart_enable(USART1);
 }
+
+void send_time_uart(const Time* time)
+{
+    char buffer[UART_BUFFER_SIZE];
+    snprintf(buffer, sizeof(buffer), "Date: %02d/%02d/%02d Time: %02d:%02d:%02d\n", time->day, time->month, time->year,
+             time->hour, time->minute, time->second);
+    for (char* p = buffer; *p != '\0'; p++)
+    {
+        usart_send_blocking(USART1, *p);
+    }
+}
