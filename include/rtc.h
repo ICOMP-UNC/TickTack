@@ -38,16 +38,16 @@
 #define DS3231_YEAR 0x06
 
 /**
- * @brief Time structure for save and organize date and time data
+ * @brief Structure to hold date and time information.
  */
 typedef struct
 {
-    uint8_t day;
-    uint8_t month;
-    uint8_t year;
-    uint8_t hour;
-    uint8_t minute;
-    uint8_t second;
+    uint8_t day;    /**< Day of the month (1-31) */
+    uint8_t month;  /**< Month of the year (1-12) */
+    uint8_t year;   /**< Year (0-99) */
+    uint8_t hour;   /**< Hour of the day (0-23) */
+    uint8_t minute; /**< Minute of the hour (0-59) */
+    uint8_t second; /**< Second of the minute (0-59) */
 } Time;
 
 /**
