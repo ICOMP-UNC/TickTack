@@ -1,5 +1,6 @@
 #include "freertos_tasks.h"
 
+#include "display.h"
 #include "uart.h"
 
 Time currentTime;
@@ -25,13 +26,24 @@ void vSend_time_uart_task(void* pvParameters)
     }
 }
 
-void vRead_RTC_Time(void* pvParameters)
+void vRead_RTC_Time_task(void* pvParameters)
 {
     (void)pvParameters;
 
     while (true)
     {
         DS3231_Get_DateTime(&currentTime);
+        vTaskDelay(pdMS_TO_TICKS(SEC));
+    }
+}
+
+void vDraw_DISPLAY_task(void* pvParameters)
+{
+    (void)pvParameters;
+
+    while (true)
+    {
+        MAX7219_Write_Char('D', 2);
         vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
