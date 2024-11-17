@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rtc.h"
 #include "spi_config.h"
 #include <libopencm3/stm32/gpio.h>
 #include <stdbool.h>
@@ -14,8 +15,8 @@ typedef enum
 } dir_mx;
 
 extern uint8_t CH[];
-extern uint8_t TENS[];
-extern uint8_t UNITS[];
+extern uint8_t NUMS[];
+extern char display_global_buffer[];
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
@@ -41,3 +42,4 @@ void MAX7219_Write_Num(char ten, char unit, uint8_t max);
 void MAX7219_Write_Tens(char ten, uint8_t max);
 void MAX7219_Write_Units(char unit, uint8_t max);
 void MAX7219_Write_N(char ten, uint8_t max, uint8_t r);
+void MAX7219_TIME(Time* time);

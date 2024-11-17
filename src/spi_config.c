@@ -13,7 +13,7 @@ void configure_spi(void)
     // spi_reset(SPI2);
 
     /* Set SPI2 to master mode. */
-    spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_64, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE, SPI_CR1_CPHA_CLK_TRANSITION_1,
+    spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_8, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE, SPI_CR1_CPHA_CLK_TRANSITION_1,
                     SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 
     /* Set software slave management and NSS pin high. */
