@@ -46,7 +46,7 @@ uint8_t DS3231_Read(uint8_t reg)
 
     // Leer el dato desde el RTC
     i2c_transfer7(I2C1, DS3231_ADDRESS, NULL, 0, &data, 1);
-    delay(50);
+    delay_micro(10);
     return data; // Retorna el dato leído
 }
 

@@ -138,7 +138,7 @@ void MAX7219_Write_Byte(uint8_t byte)
 
     spi_send(SPI1, byte);
     // usart_send_blocking(USART1,'.');
-    delay(2000);
+    delay_micro(20);
 }
 
 void MAX7219_Write_Cmd(uint8_t address, uint8_t cmd)
@@ -277,7 +277,7 @@ void MAX7219_Shift_Char(char c, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row(0, CH[j]);
             MAX7219_Shift_Left();
-            delay(speed * 10);
+            // delay(speed * 10);
         }
         break;
 
@@ -286,7 +286,7 @@ void MAX7219_Shift_Char(char c, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row((num * 8) - 1, CH[j]);
             MAX7219_Shift_Right();
-            delay(speed * 10);
+            // delay(speed * 10);
         }
         break;
 
@@ -320,7 +320,7 @@ void MAX7219_Scroll_NewChar(char* nc, uint32_t speed, dir_mx direction)
         for (int i = 0; i < (num * 8); i++)
         {
             MAX7219_Shift_Left();
-            delay(speed);
+            //  delay(speed);
         }
         break;
 
@@ -333,7 +333,7 @@ void MAX7219_Scroll_NewChar(char* nc, uint32_t speed, dir_mx direction)
         for (int i = 0; i < (num * 8); i++)
         {
             MAX7219_Shift_Right();
-            delay(speed * 10);
+            //  delay(speed * 10);
         }
         break;
 
@@ -353,7 +353,7 @@ void MAX7219_Shift_NewChar(char* nc, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row(0, nc[j]);
             MAX7219_Shift_Left();
-            delay(speed);
+            // delay(speed);
         }
         break;
 
@@ -362,7 +362,7 @@ void MAX7219_Shift_NewChar(char* nc, uint32_t speed, dir_mx direction)
         {
             MAX7219_Set_Row((num * 8) - 1, nc[j]);
             MAX7219_Shift_Right();
-            delay(speed * 10);
+            // delay(speed * 10);
         }
         break;
 
