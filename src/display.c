@@ -136,7 +136,7 @@ uint8_t CH[] = {
 void MAX7219_Write_Byte(uint8_t byte)
 {
 
-    spi_send(SPI2, byte);
+    spi_send(SPI1, byte);
     // usart_send_blocking(USART1,'.');
     delay(2000);
 }
