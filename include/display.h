@@ -14,6 +14,8 @@ typedef enum
 } dir_mx;
 
 extern uint8_t CH[];
+extern uint8_t TENS[];
+extern uint8_t UNITS[];
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
@@ -35,3 +37,7 @@ void MAX7219_Shift_Right(void);
 void MAX7219_Write_Byte(uint8_t byte);
 void MAX7219_Write_Cmd(uint8_t address, uint8_t cmd);
 void MAX7219_Clear(void);
+void MAX7219_Write_Num(char ten, char unit, uint8_t max);
+void MAX7219_Write_Tens(char ten, uint8_t max);
+void MAX7219_Write_Units(char unit, uint8_t max);
+void MAX7219_Write_N(char ten, uint8_t max, uint8_t r);

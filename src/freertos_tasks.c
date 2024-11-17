@@ -44,28 +44,28 @@ void vDraw_DISPLAY_task(void* pvParameters)
     int i = 0;
     while (true)
     {
+        MAX7219_Write_Num('2', '4', 4);
+        // MAX7219_Write_Num('2','3',4);
+        MAX7219_Write_Tens('3', 2);
 
-        MAX7219_Write_Char('4', 2);
-        MAX7219_Write_Char('3', 3);
-        MAX7219_Write_Char('3', 4);
         // MAX7219_Write_Char( ':', 1);
         switch (i)
         {
         case 0:
             // MAX7219_Clear();
-            MAX7219_Write_Char('1', 1);
+            MAX7219_Write_Units('1', 2);
             break;
         case 1:
-            MAX7219_Write_Char('2', 1);
+            MAX7219_Write_Units('2', 2);
             break;
         case 2:
-            MAX7219_Write_Char('3', 1);
+            MAX7219_Write_Units('3', 2);
             break;
         case 3:
-            MAX7219_Write_Char('4', 1);
+            MAX7219_Write_Units('4', 2);
             break;
         case 4:
-            MAX7219_Write_Char('5', 1);
+            MAX7219_Write_Units('5', 2);
             i = -1;
             break;
         default:
@@ -73,6 +73,6 @@ void vDraw_DISPLAY_task(void* pvParameters)
         }
         i++;
 
-        vTaskDelay(pdMS_TO_TICKS(SEC / 2));
+        vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
