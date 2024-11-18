@@ -2,6 +2,7 @@
 
 #include "rtc.h"
 #include <FreeRTOS.h>
+#include <semphr.h>
 #include <task.h>
 
 /**
@@ -11,6 +12,7 @@
 extern TaskHandle_t Handle_draw_display;
 extern TaskHandle_t Handle_read_rtc;
 extern Time currentTime;
+extern SemaphoreHandle_t xSemaphore;
 /**
  * @brief UartTask for freeRTOS
  * it sends data for uart every specefied time
