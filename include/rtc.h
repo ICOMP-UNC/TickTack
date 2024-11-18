@@ -37,6 +37,10 @@
  */
 #define DS3231_YEAR 0x06
 
+#define DS3231_A2_DATE 0x0D
+#define DS3231_A2_HR 0x0C
+#define DS3231_A2_MIN 0x0B
+
 /**
  * @brief Structure to hold date and time information.
  */

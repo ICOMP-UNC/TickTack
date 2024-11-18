@@ -1,4 +1,5 @@
 #include "display.h"
+#include "exti_cfg.h"
 #include "freertos_tasks.h"
 #include "i2c_cfg.h"
 #include "rtc.h"
@@ -24,6 +25,7 @@ int main(void)
     configure_usart();
     configure_i2c();
     configure_spi();
+    configure_exti();
     MAX7219_Init(0);
     xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
     // xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
@@ -38,6 +40,15 @@ int main(void)
         /* Should never reach here */
     }
     return 0;
+}
+void exti15_10_isr()
+{
+    exti_reset_request(EXTI10);
+    gpio_toggle(GPIOC, GPIO13);
+    usart_send_blocking(UART, 'B');
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName)
