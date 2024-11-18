@@ -8,7 +8,8 @@
  * @brief second in ms
  */
 #define SEC 1000
-
+extern TaskHandle_t Handle_draw_display;
+extern TaskHandle_t Handle_read_rtc;
 extern Time currentTime;
 /**
  * @brief UartTask for freeRTOS

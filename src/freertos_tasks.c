@@ -4,6 +4,8 @@
 #include "uart.h"
 
 Time currentTime;
+TaskHandle_t Handle_draw_display = NULL;
+TaskHandle_t Handle_read_rtc = NULL;
 void vSend_UART_task(void* pvParameters)
 {
     (void)pvParameters;
@@ -34,6 +36,7 @@ void vRead_RTC_Time_task(void* pvParameters)
     {
         DS3231_Get_DateTime(&currentTime);
         // usart_send_blocking(UART, 'l');
+        xTaskNotifyGive(Handle_draw_display);
         vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
@@ -43,7 +46,9 @@ void vDraw_DISPLAY_task(void* pvParameters)
     (void)pvParameters;
     while (true)
     {
+
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         MAX7219_TIME(&currentTime);
-        vTaskDelay(pdMS_TO_TICKS(SEC));
+        // vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
