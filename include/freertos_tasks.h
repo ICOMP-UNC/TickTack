@@ -2,14 +2,17 @@
 
 #include "rtc.h"
 #include <FreeRTOS.h>
+#include <semphr.h>
 #include <task.h>
 
 /**
  * @brief second in ms
  */
 #define SEC 1000
-
+extern TaskHandle_t Handle_draw_display;
+extern TaskHandle_t Handle_read_rtc;
 extern Time currentTime;
+extern SemaphoreHandle_t xSemaphore;
 /**
  * @brief UartTask for freeRTOS
  * it sends data for uart every specefied time
@@ -24,4 +27,6 @@ void vSend_time_uart_task(void* args);
 /**
  * @brief Task to Read DS3231 data and time, storage all on a time struct, all every speciefied time
  */
-void vRead_RTC_Time(void* pvParameters);
+void vRead_RTC_Time_task(void* pvParameters);
+
+void vDraw_DISPLAY_task(void* pvParameters);

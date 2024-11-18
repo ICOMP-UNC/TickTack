@@ -5,6 +5,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/usart.h>
 
+#define UART USART2
 /**
  * @brief stm32 port using for uart configuration
  */
@@ -12,11 +13,11 @@
 /**
  * @brief pin used for TX in uart1
  */
-#define UART_TX_PIN GPIO9
+#define UART_TX_PIN GPIO2
 /**
  * @brief pin used for RX in uart1
  */
-#define UART_RX_PIN GPIO10
+#define UART_RX_PIN GPIO3
 /**
  * @brief uart baurate configuration
  */

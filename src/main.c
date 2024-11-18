@@ -1,8 +1,9 @@
+#include "display.h"
 #include "freertos_tasks.h"
 #include "i2c_cfg.h"
 #include "rtc.h"
+#include "spi_config.h"
 #include "uart.h"
-
 /**
  * @brief Configure the system clock to run at 72 MHz using an 8 MHz external crystal.
  */
@@ -19,11 +20,18 @@ void systemInit(void)
 int main(void)
 {
     systemInit();
+    xSemaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(xSemaphore);
     configure_usart();
     configure_i2c();
-    xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
-    xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
-    xTaskCreate(vRead_RTC_Time, "ReadRTC", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 2, NULL);
+    configure_spi();
+    MAX7219_Init(0);
+    xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
+    // xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
+    xTaskCreate(vRead_RTC_Time_task, "ReadRTC", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES,
+                &Handle_read_rtc);
+    xTaskCreate(vDraw_DISPLAY_task, "DrawDisplay", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES,
+                &Handle_draw_display);
 
     vTaskStartScheduler();
     while (1)
