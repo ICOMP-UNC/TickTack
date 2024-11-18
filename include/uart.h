@@ -4,7 +4,9 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/usart.h>
-
+/**
+ * @brief UART peripherial in use
+ */
 #define UART USART2
 /**
  * @brief stm32 port using for uart configuration

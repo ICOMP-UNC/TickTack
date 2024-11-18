@@ -20,8 +20,7 @@ void systemInit(void)
 int main(void)
 {
     systemInit();
-    xSemaphore = xSemaphoreCreateBinary();
-    xSemaphoreGive(xSemaphore);
+    semaphore_init();
     configure_usart();
     configure_i2c();
     configure_spi();

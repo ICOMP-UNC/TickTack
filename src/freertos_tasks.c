@@ -32,7 +32,8 @@ void vSend_time_uart_task(void* pvParameters)
 void vRead_RTC_Time_task(void* pvParameters)
 {
     (void)pvParameters;
-    DS3231_Set_Date_Time(18, 11, 24, 1, 3, 13, 0);
+    // DS3231_Set_Date_Time(18, 11, 24, 1, 4, 19, 25);
+    // this function must be commented unless you want to calibrate DS3231 Hour
     while (true)
     {
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
@@ -59,4 +60,9 @@ void vDraw_DISPLAY_task(void* pvParameters)
         }
         // vTaskDelay(pdMS_TO_TICKS(SEC)); // No es necesario con la sincronización
     }
+}
+void semaphore_init()
+{
+    xSemaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(xSemaphore);
 }
