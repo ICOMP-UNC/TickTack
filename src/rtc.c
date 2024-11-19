@@ -46,7 +46,7 @@ uint8_t DS3231_Read(uint8_t reg)
 
     // Leer el dato desde el RTC
     i2c_transfer7(I2C1, DS3231_ADDRESS, NULL, 0, &data, 1);
-    delay_micro(20);
+    // delay_timer_micro(20);
     return data; // Retorna el dato leído
 }
 
@@ -89,4 +89,31 @@ void DS3231_Get_DateTime(Time* time)
     time->day = DS3231_Bcd_Bin(DS3231_Read(DS3231_DATE) & 0x7F);
     time->month = DS3231_Bcd_Bin(DS3231_Read(DS3231_MONTH) & 0x7F);
     time->year = DS3231_Bcd_Bin(DS3231_Read(DS3231_YEAR) & 0x7F);
+}
+
+void DS3231_Set_Alarm2(uint8_t hr, uint8_t mn)
+{
+    DS323_write_command(0x0F, 0b00001000); // clear pendings flags
+    uint8_t alarm_tx[4];
+    hr = DS3231_Bin_Bcd(hr) & 0x3F;
+    alarm_tx[0] = DS3231_A2_MIN;
+    alarm_tx[1] = DS3231_Bin_Bcd(mn);
+    alarm_tx[2] = hr;
+    alarm_tx[3] = 0xFF; // to ignore date (only matches with hour and minute)
+    i2c_transfer7(I2C1, DS3231_ADDRESS, alarm_tx, sizeof(alarm_tx), NULL, 0);
+}
+
+void DS323_write_command(uint8_t reg, uint8_t cmd)
+{
+    uint8_t command[2];
+    command[0] = reg;
+    command[1] = cmd;
+    i2c_transfer7(I2C1, DS3231_ADDRESS, command, sizeof(command), NULL, 0);
+}
+
+uint8_t ds3231_read_register(uint8_t reg)
+{
+    uint8_t data;
+    i2c_transfer7(I2C1, DS3231_ADDRESS, &reg, 1, &data, 1);
+    return data;
 }

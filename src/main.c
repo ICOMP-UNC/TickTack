@@ -1,8 +1,11 @@
 #include "display.h"
+#include "exti_cfg.h"
 #include "freertos_tasks.h"
 #include "i2c_cfg.h"
+#include "pwm.h"
 #include "rtc.h"
 #include "spi_config.h"
+#include "timer_cfg.h"
 #include "uart.h"
 /**
  * @brief Configure the system clock to run at 72 MHz using an 8 MHz external crystal.
@@ -24,13 +27,18 @@ int main(void)
     configure_usart();
     configure_i2c();
     configure_spi();
+    configure_exti();
+    configure_timer();
+    configure_pwm();
     MAX7219_Init(0);
     xTaskCreate(vSend_UART_task, "Send_Uart", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
-    // xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
+    xTaskCreate(vSend_time_uart_task, "Send_Time", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 4, NULL);
     xTaskCreate(vRead_RTC_Time_task, "ReadRTC", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES,
                 &Handle_read_rtc);
     xTaskCreate(vDraw_DISPLAY_task, "DrawDisplay", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES,
                 &Handle_draw_display);
+
+    xTaskCreate(vAlarm_task, "AlarmSound", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES, &Handle_alarm);
 
     vTaskStartScheduler();
     while (1)

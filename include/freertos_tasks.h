@@ -21,6 +21,11 @@ extern TaskHandle_t Handle_draw_display;
  */
 extern TaskHandle_t Handle_read_rtc;
 /**
+ * @brief Handle Alarm task
+ * Is used to control the signals from isr to alarm task
+ */
+extern TaskHandle_t Handle_alarm;
+/**
  * @brief Current time struct
  * This struct store all data time taked form DS3231
  */
@@ -41,14 +46,18 @@ void vSend_UART_task(void* args);
 void vSend_time_uart_task(void* args);
 /**
  * @brief Task to Read DS3231 data and time, storage all on a time struct, all every speciefied time
- * it syncrhonized with draw Display task
+ * it syncrhonize with draw Display task
  */
 void vRead_RTC_Time_task(void* pvParameters);
 /**
  * @brief Task to write current Time in MAX7219 display
- * it syncrhonized with RTC time task
+ * it syncrhonize with RTC time task
  */
 void vDraw_DISPLAY_task(void* pvParameters);
+/**
+ * @brief Task to make sound the melody in buzzer
+ */
+void vAlarm_task(void* pvParameters);
 /**
  * @brief Init binary semaphore
  */

@@ -9,33 +9,38 @@
 #define DS3231_ADDRESS 0x68
 
 /**
- * @brief DS3231 Second register (from datasheet)
+ * @brief DS3231 Second register ADDRESS(from datasheet)
  */
 #define DS3231_SEC 0x00
 /**
- * @brief DS3231 Minute register (from datasheet)
+ * @brief DS3231 Minute register ADDRESS (from datasheet)
  */
 #define DS3231_MIN 0x01
 /**
- * @brief DS3231 Hour register (from datasheet)
+ * @brief DS3231 Hour register ADDRESS(from datasheet)
  */
 #define DS3231_HOUR 0x02
 /**
- * @brief DS3231 Day register (from datasheet)
+ * @brief DS3231 Day register ADDRESS(from datasheet)
  */
 #define DS3231_DAY 0x03
 /**
- * @brief DS3231 Date register (from datasheet)
+ * @brief DS3231 Date register ADDRESS (from datasheet)
  */
 #define DS3231_DATE 0x04
 /**
- * @brief DS3231 Month register (from datasheet)
+ * @brief DS3231 Month register ADDRESS(from datasheet)
  */
 #define DS3231_MONTH 0x05
 /**
- * @brief DS3231 Year register (from datasheet)
+ * @brief DS3231 Year register ADDRESS(from datasheet)
  */
 #define DS3231_YEAR 0x06
+
+/**
+ * @brief DS3231 Alarm2 min register ADDRESS (from datasheet)
+ */
+#define DS3231_A2_MIN 0x0B
 
 /**
  * @brief Structure to hold date and time information.
@@ -118,3 +123,21 @@ uint8_t DS3231_Bcd_Bin(uint8_t bcd_value);
  * @param time Time struct to storage Date and Time
  */
 void DS3231_Get_DateTime(Time* time);
+/**
+ * @brief Set the DS3231 alarm (ingores date, only hours and minutes)
+ * @param hr hour to trigger alarm
+ * @param mn minute to trigger alarm
+ */
+void DS3231_Set_Alarm2(uint8_t hr, uint8_t mn);
+/**
+ * @brief writes command in DS3231 register speciefied
+ * @param reg addres to be written
+ * @param cmd command to write
+ */
+void DS323_write_command(uint8_t reg, uint8_t cmd);
+/**
+ * @brief reads DS3231 register speciefied
+ * @param reg addres to be readed
+ * @return data readed
+ */
+uint8_t ds3231_read_register(uint8_t reg);

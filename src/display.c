@@ -1,5 +1,6 @@
 #include "display.h"
 #include "delay.h"
+#include "timer_cfg.h"
 #include "uart.h"
 
 char display_global_buffer[UART_BUFFER_SIZE];
