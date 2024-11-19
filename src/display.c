@@ -154,7 +154,7 @@ void MAX7219_Write_Byte(uint8_t byte)
 
     spi_send(SPI1, byte);
     // usart_send_blocking(USART1,'.');
-    delay_timer_micro(20);
+    delay_micro(20);
 }
 
 void MAX7219_Write_Cmd(uint8_t address, uint8_t cmd)

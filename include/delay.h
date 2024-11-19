@@ -21,6 +21,4 @@ void delay_micro(uint32_t micros);
  * @brief ticks to micro seconds for delay loop
  * @param millis milli seconds to wait
  */
-void delay_milli(uint32_t millis);
-
-void delay_timer_micro(uint32_t micros);
+void delay_millis(uint32_t millis);
