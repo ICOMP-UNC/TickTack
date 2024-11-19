@@ -93,6 +93,7 @@ void DS3231_Get_DateTime(Time* time)
 
 void DS3231_Set_Alarm2(uint8_t hr, uint8_t mn)
 {
+    DS323_write_command(0x0F, 0b00001000); // clear pendings flags
     uint8_t alarm_tx[4];
     hr = DS3231_Bin_Bcd(hr) & 0x3F;
     alarm_tx[0] = DS3231_A2_MIN;

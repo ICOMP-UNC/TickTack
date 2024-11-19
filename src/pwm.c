@@ -2,11 +2,11 @@
 
 void configure_pwm(void)
 {
-    // Habilitar los relojes necesarios
+    // Enable necessary clocks
     rcc_periph_clock_enable(RCC_GPIOA); // enable GPIOA clock
     rcc_periph_clock_enable(RCC_TIM1);  // enable  clock for TIM
 
-    // Configurar el pin A9 como función alternativa (PWM)
+    // Set A9 in alternative function (PWM)
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO9);
 
     // TIM1 configuration with
@@ -44,25 +44,17 @@ void pwm_set_frequency(uint32_t frequency)
     {
         period = 1000000 / frequency;              // period in microseconds (for 1 MHz clock)
     }
-    timer_set_period(TIM1, period);                // Establecer el periodo en el timer 2
-    timer_set_oc_value(TIM1, TIM_OC2, period / 2); // 50% duty cycle (sonido cuadrado)
+    timer_set_period(TIM1, period);                // Establish Tim1 period
+    timer_set_oc_value(TIM1, TIM_OC2, period / 2); // 50% duty cycle
 }
 void start_buzzer(uint32_t frequency)
 {
     pwm_set_frequency(frequency);
-    timer_enable_counter(TIM1); // Habilitar el temporizador
+    timer_enable_counter(TIM1); // start count
 }
 
 void stop_buzzer()
 {
     pwm_set_frequency(0);
-    timer_disable_counter(TIM1); // Deshabilitar el temporizador
-}
-
-// Reproducir una nota por un tiempo específico (en milisegundos)
-void play_note(uint32_t frequency, uint32_t duration)
-{
-    pwm_set_frequency(frequency); // Establecer la frecuencia de la nota
-    delay_micro(duration);
-    pwm_set_frequency(0);         // Apagar el sonido después de la duración
+    timer_disable_counter(TIM1); // disable count
 }
