@@ -7,4 +7,7 @@
 #define RTC_INT_PIN GPIO10
 #define RTC_INT_PORT GPIOA
 
+#define BUTTON_OFFALARM_PORT GPIOB
+#define BUTTON_OFFALARM_PIN GPIO12
+
 void configure_exti(void);

@@ -20,6 +20,7 @@ extern TaskHandle_t Handle_draw_display;
  * Is used to control the signals to rtc read task
  */
 extern TaskHandle_t Handle_read_rtc;
+extern TaskHandle_t Handle_alarm;
 /**
  * @brief Current time struct
  * This struct store all data time taked form DS3231
@@ -49,6 +50,9 @@ void vRead_RTC_Time_task(void* pvParameters);
  * it syncrhonized with RTC time task
  */
 void vDraw_DISPLAY_task(void* pvParameters);
+
+void vAlarm_task(void* pvParameters);
+
 /**
  * @brief Init binary semaphore
  */

@@ -35,9 +35,17 @@ void configure_pwm(void)
 // Set pwm frequency
 void pwm_set_frequency(uint32_t frequency)
 {
-    uint32_t period = 1000000 / frequency;         // period in microseconds (for 1 MHz clock)
-    timer_set_period(TIM2, period);                // Establecer el periodo en el timer 2
-    timer_set_oc_value(TIM2, TIM_OC2, period / 2); // 50% duty cycle (sonido cuadrado)
+    uint32_t period = 1000000 / frequency;
+    if (frequency == 0)
+    {
+        period = 0;
+    }
+    else
+    {
+        period = 1000000 / frequency;              // period in microseconds (for 1 MHz clock)
+    }
+    timer_set_period(TIM1, period);                // Establecer el periodo en el timer 2
+    timer_set_oc_value(TIM1, TIM_OC2, period / 2); // 50% duty cycle (sonido cuadrado)
 }
 void start_buzzer(uint32_t frequency)
 {
@@ -47,6 +55,7 @@ void start_buzzer(uint32_t frequency)
 
 void stop_buzzer()
 {
+    pwm_set_frequency(0);
     timer_disable_counter(TIM1); // Deshabilitar el temporizador
 }
 

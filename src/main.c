@@ -38,23 +38,14 @@ int main(void)
     xTaskCreate(vDraw_DISPLAY_task, "DrawDisplay", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES,
                 &Handle_draw_display);
 
+    xTaskCreate(vAlarm_task, "AlarmSound", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES, &Handle_alarm);
+
     vTaskStartScheduler();
     while (1)
     {
         /* Should never reach here */
     }
     return 0;
-}
-void exti15_10_isr()
-{
-    exti_reset_request(EXTI10);
-    gpio_toggle(GPIOC, GPIO13);
-    usart_send_blocking(UART, 'B');
-    timer_set_period(TIM1, 1000000 / 1000);
-    timer_set_oc_value(TIM1, TIM_OC2, (1000000 / 1000) / 2); // 50% de ciclo útil inicial
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName)
