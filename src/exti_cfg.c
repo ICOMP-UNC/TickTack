@@ -13,7 +13,7 @@ void configure_exti()
     nvic_enable_irq(NVIC_EXTI15_10_IRQ);
 
     // Configure EXTI0 (PA0) for falling edge initially
-    exti_select_source(EXTI10, RTC_INT_PORT);      // Set PA0 as the EXTI0 source
-    exti_set_trigger(EXTI10, EXTI_TRIGGER_RISING); // Trigger interrupt on falling edge
+    exti_select_source(EXTI10, RTC_INT_PORT);       // Set PA0 as the EXTI0 source
+    exti_set_trigger(EXTI10, EXTI_TRIGGER_FALLING); // Trigger interrupt on falling edge
     exti_enable_request(EXTI10);
 }

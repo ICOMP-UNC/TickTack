@@ -122,3 +122,7 @@ uint8_t DS3231_Bcd_Bin(uint8_t bcd_value);
  * @param time Time struct to storage Date and Time
  */
 void DS3231_Get_DateTime(Time* time);
+
+void DS3231_Set_Alarm2(uint8_t hr, uint8_t mn);
+void DS323_write_command(uint8_t reg, uint8_t cmd);
+uint8_t ds3231_read_register(uint8_t reg);

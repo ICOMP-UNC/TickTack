@@ -24,7 +24,13 @@ void vSend_time_uart_task(void* pvParameters)
 
     while (true)
     {
-        send_time_uart(&currentTime);
+        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+        {
+            // delay_milli(1);
+            send_time_uart(&currentTime);
+            xSemaphoreGive(xSemaphore);
+        }
+
         vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
@@ -32,8 +38,11 @@ void vSend_time_uart_task(void* pvParameters)
 void vRead_RTC_Time_task(void* pvParameters)
 {
     (void)pvParameters;
-    // DS3231_Set_Date_Time(18, 11, 24, 1, 4, 19, 25);
-    // this function must be commented unless you want to calibrate DS3231 Hour
+    // DS3231_Set_Date_Time(18, 11, 24, 1, 00, 42, 00);
+    //  this function must be commented unless you want to calibrate DS3231 Hour
+    DS323_write_command(0x0E, 0b00011110);
+    DS323_write_command(0x0F, 0b00001000);
+    DS3231_Set_Alarm2(00, 52);
     while (true)
     {
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
@@ -54,7 +63,7 @@ void vDraw_DISPLAY_task(void* pvParameters)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Espera notificación de nueva lectura
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
         {
-            delay_milli(1);
+            // delay_milli(1);
             MAX7219_TIME(&currentTime);
             xSemaphoreGive(xSemaphore);
         }

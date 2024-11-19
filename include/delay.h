@@ -1,4 +1,5 @@
 #pragma once
+#include "timer_cfg.h"
 #include <stdio.h>
 
 /**
@@ -21,3 +22,5 @@ void delay_micro(uint32_t micros);
  * @param millis milli seconds to wait
  */
 void delay_milli(uint32_t millis);
+
+void delay_timer_micro(uint32_t micros);
