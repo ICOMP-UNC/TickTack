@@ -44,7 +44,7 @@ void vRead_RTC_Time_task(void* pvParameters)
     //  this function must be commented unless you want to calibrate DS3231 Hour
     // DS323_write_command(0x0E, 0b00011110);
 
-    DS3231_Set_Alarm2(8, 50);
+    DS3231_Set_Alarm2(10, 26);
     while (true)
     {
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
@@ -81,7 +81,7 @@ void vAlarm_task(void* pvParameters)
                          C5, Bb4, G4, D4,  F4, A4, Ab4, F4, D4, Bb4, A4, Ab4, G4, F4, G4, F4,  D4};
 
     uint16_t durations[] = {440, 200, 960, 420, 200, 830, 430, 220, 360, 200, 400,  420, 200, 910, 380, 200, 1000,
-                            350, 200, 930, 390, 210, 870, 330, 220, 520, 360, 1530, 180, 380, 180, 370, 450};
+                            350, 200, 930, 390, 210, 870, 330, 220, 520, 360, 1530, 180, 380, 180, 370, 450, 1};
     while (true)
     {
         // melody length
@@ -94,9 +94,9 @@ void vAlarm_task(void* pvParameters)
             // note duration
             vTaskDelay(pdMS_TO_TICKS(durations[i]));
         }
+        // Pausa entre repeticiones de la canción
+        vTaskDelay(pdMS_TO_TICKS(SEC * 2)); // 2 segundos
     }
-    // Pausa entre repeticiones de la canción
-    vTaskDelay(pdMS_TO_TICKS(SEC * 2)); // 2 segundos
 }
 
 void semaphore_init()
@@ -115,7 +115,6 @@ void exti15_10_isr()
         exti_reset_request(EXTI10);
         vTaskSuspend(Handle_read_rtc);
 
-        gpio_toggle(GPIOC, GPIO13);
         usart_send_blocking(UART, 'I');
 
         vTaskResume(Handle_alarm);
@@ -126,7 +125,6 @@ void exti15_10_isr()
 
         vTaskSuspend(Handle_alarm);
         stop_buzzer();
-        gpio_toggle(GPIOC, GPIO13);
         usart_send_blocking(UART, 'I');
         vTaskResume(Handle_read_rtc);
     }

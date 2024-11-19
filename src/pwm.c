@@ -42,7 +42,7 @@ void pwm_set_frequency(uint32_t frequency)
     }
     else
     {
-        period = 1000000 / frequency;              // period in microseconds (for 1 MHz clock)
+        period = 1000000 / frequency; // period in microseconds (for 1 MHz clock)
     }
     timer_set_period(TIM1, period);                // Establish Tim1 period
     timer_set_oc_value(TIM1, TIM_OC2, period / 2); // 50% duty cycle
