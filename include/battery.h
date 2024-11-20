@@ -7,16 +7,16 @@
 #include <libopencm3/stm32/timer.h>
 
 /**
- * @brief High voltage umbral to battery 
+ * @brief High voltage umbral to battery
  */
 #define HIGH_BAT_VALUE 3
 
 /**
- * @brief MID voltage umbral to battery 
+ * @brief MID voltage umbral to battery
  * */
 #define MID_BAT_VALUE 2.6
 /**
- * @brief LOW voltage umbral to battery 
+ * @brief LOW voltage umbral to battery
  * */
 #define LOW_BAT_VALUE 2.3
 /**
@@ -39,6 +39,6 @@ void configure_dma(void);
 void configure_timer3(void);
 
 /**
- * @brief configure battery leds 
+ * @brief configure battery leds
  * */
 void configure_battery_leds(void);

@@ -17,17 +17,18 @@ void configure_adc(void)
     adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_55DOT5CYC);
     adc_set_regular_sequence(ADC1, 1, ADC_CHANNEL1);
     adc_enable_external_trigger_regular(ADC1, ADC_CR2_EXTSEL_TIM3_TRGO); // Configurar el trigger externo
-    adc_enable_external_trigger_regular(ADC1, ADC_CR2_EXTTRIG); // Habilitar el trigger externo
+    adc_enable_external_trigger_regular(ADC1, ADC_CR2_EXTTRIG);          // Habilitar el trigger externo
     adc_power_on(ADC1);
     adc_reset_calibration(ADC1);
     adc_calibration(ADC1);
 }
 // Configuración del DMA
-void configure_dma(void) {
+void configure_dma(void)
+{
     rcc_periph_clock_enable(RCC_DMA1);
     dma_channel_reset(DMA1, DMA_CHANNEL1);
-    dma_set_peripheral_address(DMA1, DMA_CHANNEL1, (uint32_t) &ADC_DR(ADC1));
-    dma_set_memory_address(DMA1, DMA_CHANNEL1, (uint32_t) &bat_value);
+    dma_set_peripheral_address(DMA1, DMA_CHANNEL1, (uint32_t)&ADC_DR(ADC1));
+    dma_set_memory_address(DMA1, DMA_CHANNEL1, (uint32_t)&bat_value);
     dma_set_number_of_data(DMA1, DMA_CHANNEL1, 1);
     dma_enable_memory_increment_mode(DMA1, DMA_CHANNEL1);
     dma_set_read_from_peripheral(DMA1, DMA_CHANNEL1);
