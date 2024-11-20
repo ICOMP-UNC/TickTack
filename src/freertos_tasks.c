@@ -19,8 +19,6 @@ void vSend_UART_task(void* pvParameters)
     while (true)
     {
         usart_send_blocking(UART, dato);
-        // send_bat_value_over_uart(bat_value);
-        adc_start_conversion_direct(ADC1);
         vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
@@ -56,7 +54,6 @@ void vRead_RTC_Time_task(void* pvParameters)
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
         {
             DS3231_Get_DateTime(&currentTime);
-
             xSemaphoreGive(xSemaphore);
         }
         xTaskNotifyGive(Handle_draw_display);
@@ -106,37 +103,6 @@ void vAlarm_task(void* pvParameters)
     }
 }
 
-void vBattery_task(void* pvParameters)
-{
-    (void)pvParameters;
-    float bat_V = 0;
-    while (true)
-    {
-        vTaskSuspend(NULL);
-        bat_V = (bat_value / 4095) * 3.3;
-        if (bat_V < LOW_BAT_VALUE)
-        {
-            gpio_clear(GPIOB, GPIO4);
-            gpio_clear(GPIOB, GPIO5);
-
-            gpio_set(GPIOB, GPIO3);
-        }
-        else if (bat_V < MID_BAT_VALUE)
-        {
-            gpio_clear(GPIOB, GPIO3);
-            gpio_clear(GPIOB, GPIO5);
-
-            gpio_set(GPIOB, GPIO4);
-        }
-        else
-        {
-            gpio_clear(GPIOB, GPIO4);
-            gpio_clear(GPIOB, GPIO3);
-
-            gpio_set(GPIOB, GPIO5);
-        }
-    }
-}
 
 void semaphore_init()
 {
@@ -170,40 +136,15 @@ void exti15_10_isr()
 
     // give cpu time to tasks
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void dma1_channel1_isr(void)
 {
 
-    dma_clear_interrupt_flags(DMA1, DMA_CHANNEL1, DMA_TCIF);
-    usart_send_blocking(UART, 'A');
-    vTaskResume(Handle_battery);
-    // delay_millis(30);
-    // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    // vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
-    // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    //  Aquí puedes procesar el valor de `adc_value` si es necesario
-}
-
-void send_bat_value_over_uart(int bat_value1)
-{
-    char buffer3[50];                                    // Buffer para almacenar la cadena
-    sprintf(buffer3, "Battery Value: %d\n", bat_value1); // Convertir a cadena
-    for (char* ptr = buffer3; *ptr != '\0'; ptr++)
-    {
-        usart_send_blocking(UART, *ptr);
+    if(bat_value < MID_BAT_VALUE){
+        gpio_clear(GPIOC,GPIO13);
+    }else{
+        gpio_set(GPIOC,GPIO13);
     }
-}
-
-void adc1_2_isr(void)
-{
-    // Verificar si la interrupción es por EOC
-    usart_send_blocking(UART, 'A');
-
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    // Aquí puedes procesar el valor de `adc_value` si es necesario
 }

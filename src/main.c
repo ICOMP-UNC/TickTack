@@ -32,7 +32,7 @@ int main(void)
     configure_timer();
     configure_pwm();
     configure_adc();
-    // configure_dma();
+    configure_dma();
 
     configure_timer3();
     configure_battery_leds();
