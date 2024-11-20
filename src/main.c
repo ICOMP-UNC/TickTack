@@ -45,7 +45,6 @@ int main(void)
                 &Handle_draw_display);
 
     xTaskCreate(vAlarm_task, "AlarmSound", configMINIMAL_STACK_SIZE + 100, NULL, configMAX_PRIORITIES, &Handle_alarm);
-    xTaskCreate(vAlarm_task, "BatteryCheck", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES, &Handle_battery);
     vTaskStartScheduler();
     while (1)
     {

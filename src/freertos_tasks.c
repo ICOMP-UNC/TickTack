@@ -10,7 +10,6 @@ Time currentTime;
 TaskHandle_t Handle_draw_display = NULL;
 TaskHandle_t Handle_read_rtc = NULL;
 TaskHandle_t Handle_alarm = NULL;
-TaskHandle_t Handle_battery = NULL;
 SemaphoreHandle_t xSemaphore;
 
 void vSend_UART_task(void* pvParameters)
@@ -141,7 +140,7 @@ void exti15_10_isr()
 
 void dma1_channel1_isr(void)
 {
-
+    uint16_t bat_value2 = (bat_value / 1024 )* 3;
     if(bat_value < MID_BAT_VALUE){
         gpio_clear(GPIOC,GPIO13);
     }else{
