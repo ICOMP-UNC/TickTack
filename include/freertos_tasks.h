@@ -35,6 +35,8 @@ extern Time currentTime;
  * Used for protect currentTime variable to read and write actions
  */
 extern SemaphoreHandle_t xSemaphore;
+
+extern TaskHandle_t Handle_battery;
 /**
  * @brief UartTask for freeRTOS
  * it sends data for uart every specefied time
@@ -58,7 +60,11 @@ void vDraw_DISPLAY_task(void* pvParameters);
  * @brief Task to make sound the melody in buzzer
  */
 void vAlarm_task(void* pvParameters);
+
+void vBattery_task(void* pvParameters);
 /**
  * @brief Init binary semaphore
  */
 void semaphore_init(void);
+
+void send_bat_value_over_uart(int bat_value1);

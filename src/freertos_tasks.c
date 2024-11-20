@@ -1,5 +1,6 @@
 #include "freertos_tasks.h"
 
+#include "battery.h"
 #include "delay.h"
 #include "display.h"
 #include "exti_cfg.h"
@@ -10,6 +11,7 @@ TaskHandle_t Handle_draw_display = NULL;
 TaskHandle_t Handle_read_rtc = NULL;
 TaskHandle_t Handle_alarm = NULL;
 SemaphoreHandle_t xSemaphore;
+
 void vSend_UART_task(void* pvParameters)
 {
     (void)pvParameters;
@@ -30,6 +32,7 @@ void vSend_time_uart_task(void* pvParameters)
         {
             // delay_milli(1);
             send_time_uart(&currentTime);
+
             xSemaphoreGive(xSemaphore);
         }
 
@@ -131,6 +134,18 @@ void exti15_10_isr()
 
     // give cpu time to tasks
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+void dma1_channel1_isr(void)
+{
+    uint16_t bat_value2 = (bat_value / 1024) * 3;
+    if (bat_value < MID_BAT_VALUE)
+    {
+        gpio_clear(GPIOC, GPIO13);
+    }
+    else
+    {
+        gpio_set(GPIOC, GPIO13);
+    }
 }
