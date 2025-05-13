@@ -5,11 +5,12 @@
 #include "exti_cfg.h"
 #include "pwm.h"
 #include "uart.h"
-Time currentTime;
+
 TaskHandle_t Handle_draw_display = NULL;
 TaskHandle_t Handle_read_rtc = NULL;
 TaskHandle_t Handle_alarm = NULL;
-SemaphoreHandle_t xSemaphore;
+TaskHandle_t Handle_send_time_uart = NULL;
+QueueHandle_t xQueue;
 void vSend_UART_task(void* pvParameters)
 {
     (void)pvParameters;
@@ -23,34 +24,33 @@ void vSend_UART_task(void* pvParameters)
 void vSend_time_uart_task(void* pvParameters)
 {
     (void)pvParameters;
-
+    Time receivedTime;
     while (true)
-    {
-        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+    {   
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        if (xQueueReceive(xQueue, &receivedTime, portMAX_DELAY) == pdTRUE)
         {
             // delay_milli(1);
-            send_time_uart(&currentTime);
-            xSemaphoreGive(xSemaphore);
+            send_time_uart(&receivedTime);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(SEC));
     }
 }
 
 void vRead_RTC_Time_task(void* pvParameters)
 {
     (void)pvParameters;
-    // DS3231_Set_Date_Time(18, 11, 24, 1, 00, 42, 00);
+     DS3231_Set_Date_Time(18, 11, 24, 1, 17, 13, 00);
     //  this function must be commented unless you want to calibrate DS3231 Hour
     // DS323_write_command(0x0E, 0b00011110);
-
-    DS3231_Set_Alarm2(10, 26);
+    Time currentTime;
+    DS3231_Set_Alarm2(17, 14);
     while (true)
-    {
-        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+    {   
+        DS3231_Get_DateTime(&currentTime);
+        if (xQueueSend(xQueue, &currentTime, portMAX_DELAY) != pdTRUE)
         {
-            DS3231_Get_DateTime(&currentTime);
-            xSemaphoreGive(xSemaphore);
+        
         }
         xTaskNotifyGive(Handle_draw_display);
         vTaskDelay(pdMS_TO_TICKS(SEC));
@@ -60,14 +60,16 @@ void vRead_RTC_Time_task(void* pvParameters)
 void vDraw_DISPLAY_task(void* pvParameters)
 {
     (void)pvParameters;
+    Time receivedTime;
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Wait for a lecture notification
-        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+        if (xQueueReceive(xQueue, &receivedTime, portMAX_DELAY) == pdTRUE)
         {
 
-            MAX7219_TIME(&currentTime);
-            xSemaphoreGive(xSemaphore);
+            MAX7219_TIME(&receivedTime);
+            xTaskNotifyGive(Handle_send_time_uart);
+            xQueueSend(xQueue, &receivedTime, portMAX_DELAY);
         }
         // vTaskDelay(pdMS_TO_TICKS(SEC)); // not neccesary with synchronization
     }
@@ -101,8 +103,9 @@ void vAlarm_task(void* pvParameters)
 
 void semaphore_init()
 {
-    xSemaphore = xSemaphoreCreateBinary();
-    xSemaphoreGive(xSemaphore);
+   xQueue = xQueueCreate(10, sizeof(Time)); 
+   if (xQueue == NULL) { // Manejar el error de no poder crear la cola 
+   }
 }
 
 // eint ISRs
@@ -131,6 +134,5 @@ void exti15_10_isr()
 
     // give cpu time to tasks
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    vTaskNotifyGiveFromISR(Handle_draw_display, &xHigherPriorityTaskWoken);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }

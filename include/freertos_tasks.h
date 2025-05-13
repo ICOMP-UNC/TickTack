@@ -25,11 +25,8 @@ extern TaskHandle_t Handle_read_rtc;
  * Is used to control the signals from isr to alarm task
  */
 extern TaskHandle_t Handle_alarm;
-/**
- * @brief Current time struct
- * This struct store all data time taked form DS3231
- */
-extern Time currentTime;
+extern TaskHandle_t Handle_send_time_uart;
+extern QueueHandle_t xQueue;
 /**
  * @brief Binary Semaphore
  * Used for protect currentTime variable to read and write actions
